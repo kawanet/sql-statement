@@ -14,6 +14,8 @@ sql.append("SELECT * FROM ?? WHERE id = ?", tableName, id);
 console.log(sql + ""); // => "SELECT * FROM `users` WHERE id = 'AC3C21E7'"
 ```
 
+See [documentation](http://kawanet.github.io/sql-statement/SQL.html) for more detail.
+
 ### This DOES
 
 - This does build a SQL statement in safe. That's it.
