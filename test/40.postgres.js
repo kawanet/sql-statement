@@ -5,15 +5,15 @@ var pg = require("pg");
 var promisen = require("promisen");
 
 var TESTNAME = __filename.replace(/^.*\//, "");
-var SQL = require("../sql");
+var SQL = require("../sql").Pg;
 
 var go = process.env.PGHOST || process.env.PGDATABASE;
 if (!go) describe = describe.skip;
 var suffix = go ? " testing" : " skipped. To test this, please set PGHOST=127.0.0.1 PGDATABASE=test";
 
 describe(TESTNAME + suffix, function() {
-  var sql1 = new SQL('SELECT ? AS "foo"', "FOO");
-  it(sql1.query(), function(done) {
+  var sql1 = new SQL('SELECT ? AS ??', "FOO", "foo");
+  it(sql1.query() + " -> client.query(sql+'', callback)", function(done) {
     var client = new pg.Client();
     client.connect(function(err) {
       if (err) return done(err);
@@ -29,17 +29,36 @@ describe(TESTNAME + suffix, function() {
     });
   });
 
-  var sql2 = new SQL("SELECT 'FOO' AS \"foo\"");
-  it("promisen.denodeify(client.query).apply(client, sql)", function(done) {
+  // pg library has completely difference style of placeholder
+
+  var sql2 = new SQL('SELECT ? AS ??', "FOO", "foo");
+  it(sql2.query() + " -> promisen.denodeify(client.query).call(client, sql+'').then()", function(done) {
     var client = new pg.Client();
     client.connect(function(err) {
       if (err) return done(err);
-      promisen.denodeify(client.query).apply(client, sql2).then(wrap(done, function(result) {
+      promisen.denodeify(client.query).call(client, sql2 + "").then(wrap(done, function(result) {
         var rows = result.rows;
         assert.equal(typeof rows, "object");
         var row = rows[0];
         assert.equal(typeof row, "object");
         assert.equal(row.foo, "FOO");
+      })).catch(done);
+    });
+  });
+
+  // pg library has completely difference style of placeholder
+
+  var sql3 = new SQL("SELECT $1::text AS \"baz\"", "BAZ");
+  it(sql3.query() + " -> promisen.denodeify(client.query).apply(client, sql).then()", function(done) {
+    var client = new pg.Client();
+    client.connect(function(err) {
+      if (err) return done(err);
+      promisen.denodeify(client.query).apply(client, sql3).then(wrap(done, function(result) {
+        var rows = result.rows;
+        assert.equal(typeof rows, "object");
+        var row = rows[0];
+        assert.equal(typeof row, "object");
+        assert.equal(row.baz, "BAZ");
       })).catch(done);
     });
   });

@@ -9,21 +9,37 @@ var SQL = require("../sql");
 
 describe(TESTNAME + " testing", function() {
   var sql1 = new SQL("SELECT ? AS ??", "BAR", "bar");
-  it(sql1.query(), function(done) {
+  it(sql1.query() + " -> db.all(sql+'', callback)", function(done) {
     var db = new sqlite3.Database(":memory:");
-    db.get(sql1 + "", function(err, row) {
+    db.all(sql1 + "", function(err, rows) {
+      assert.equal(typeof rows, "object");
+      var row = rows[0];
       assert.equal(typeof row, "object");
       assert.equal(row.bar, "BAR");
       done(err);
     });
   });
 
-  var sql2 = new SQL("SELECT ? AS `foo`", "FOO");
-  it("promisen.denodeify(db.get).apply(db, sql)", function(done) {
+  var sql2 = new SQL("SELECT ? AS ??", "FOO", "foo");
+  it(sql2.query() + " -> promisen.denodeify(db.all).call(db, sql+'').then()", function(done) {
     var db = new sqlite3.Database(":memory:");
-    promisen.denodeify(db.get).apply(db, sql2).then(wrap(done, function(row) {
+    promisen.denodeify(db.all).call(db, sql2 + "").then(wrap(done, function(rows) {
+      assert.equal(typeof rows, "object");
+      var row = rows[0];
       assert.equal(typeof row, "object");
       assert.equal(row.foo, "FOO");
+    })).catch(done);
+  });
+
+  // sqlite3 library does NOT support ??, double question marks
+  var sql3 = new SQL("SELECT ? AS `baz`", "BAZ");
+  it(sql3.query() + " -> promisen.denodeify(db.all).apply(db, sql).then()", function(done) {
+    var db = new sqlite3.Database(":memory:");
+    promisen.denodeify(db.all).apply(db, sql3).then(wrap(done, function(rows) {
+      assert.equal(typeof rows, "object");
+      var row = rows[0];
+      assert.equal(typeof row, "object");
+      assert.equal(row.baz, "BAZ");
     })).catch(done);
   });
 });

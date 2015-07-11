@@ -1,6 +1,6 @@
 ## Testing
 
-To test with MySQL and PostgreSQL, it needs installed and some environment variables below.
+To test with MySQL and PostgreSQL, it needs the database running and some environment variables as below.
 
 ## Testing with MySQL
 

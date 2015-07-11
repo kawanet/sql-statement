@@ -20,9 +20,9 @@ var suffix = go ? " testing" : " skipped. To test this, please set MYSQL_HOST=12
 
 describe(TESTNAME + suffix, function() {
   var sql1 = new SQL("SELECT ? AS ??", "BAR", "bar");
-  it(sql1.query(), function(done) {
-    var connection = mysql.createConnection(config);
-    connection.query(sql1 + "", function(err, rows) {
+  it(sql1.query() + " -> conn.query(sql+'', callback)", function(done) {
+    var conn = mysql.createConnection(config);
+    conn.query(sql1 + "", function(err, rows) {
       assert.equal(typeof rows, "object");
       var row = rows[0];
       assert.equal(typeof row, "object");
@@ -31,14 +31,25 @@ describe(TESTNAME + suffix, function() {
     });
   });
 
-  var sql2 = new SQL("SELECT ? AS `foo`", "FOO");
-  it("promisen.denodeify(connection.query).apply(connection, sql)", function(done) {
-    var connection = mysql.createConnection(config);
-    promisen.denodeify(connection.query).apply(connection, sql2).then(wrap(done, function(rows) {
+  var sql2 = new SQL("SELECT ? AS ??", "FOO", "foo");
+  it(sql2.query() + " -> promisen.denodeify(conn.query).call(conn, sql+'').then()", function(done) {
+    var conn = mysql.createConnection(config);
+    promisen.denodeify(conn.query).call(conn, sql2 + "").then(wrap(done, function(rows) {
       assert.equal(typeof rows, "object");
       var row = rows[0];
       assert.equal(typeof row, "object");
       assert.equal(row.foo, "FOO");
+    })).catch(done);
+  });
+
+  var sql3 = new SQL("SELECT ? AS ??", "BAZ", "baz");
+  it(sql3.query() + " -> promisen.denodeify(conn.query).apply(conn, sql).then()", function(done) {
+    var conn = mysql.createConnection(config);
+    promisen.denodeify(conn.query).apply(conn, sql3).then(wrap(done, function(rows) {
+      assert.equal(typeof rows, "object");
+      var row = rows[0];
+      assert.equal(typeof row, "object");
+      assert.equal(row.baz, "BAZ");
     })).catch(done);
   });
 });

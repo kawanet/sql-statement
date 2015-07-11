@@ -31,14 +31,43 @@ var unshift = Array.prototype.unshift;
 
 function SQL(query, binding) {
   var sql = this;
-  if (sql instanceof SQL) {
-    push.call(sql, "", []);
-  } else {
-    sql = new SQL();
-  }
+  if (!(sql instanceof SQL)) sql = new SQL();
+  if (!sql.length) push.call(sql, "", []);
   if (arguments.length) sql.append.apply(sql, arguments);
   return sql;
 }
+
+/**
+ * This defines quote character for placeholder "?", single question mark.
+ *
+ * @name SQL.prototype.?
+ * @type {string}
+ * @default <code>'</code>, "0x27"
+ */
+
+SQL.prototype["?"] = "'";
+
+/**
+ * This defines quote character for placeholder "??", double question marks.
+ * Default is <code>`</code> which works with MySQL and SQLite.
+ * Set <code>"</code>, double quote, to work with PostgreSQL.
+ *
+ * @name SQL.prototype.??
+ * @type {string}
+ * @default <code>`</code>, "0x60"
+ */
+
+SQL.prototype["??"] = "`";
+
+/**
+ * This defines quote character for placeholder "???", triple question marks.
+ *
+ * @name SQL.prototype.???
+ * @type {string}
+ * @default undefined (which means no escaping applied)
+ */
+
+SQL.prototype["???"] = void 0;
 
 /**
  * This returns the string of SQL statement unformatted.
@@ -115,22 +144,39 @@ SQL.prototype.append = function(query, binding) {
  */
 
 SQL.prototype.toString = function() {
-  var sql = this[0];
+  var sql = this;
+  var query = this[0];
   var bindings = this[1];
   var idx = 0;
-  return sql.replace(/(\?\??\??)/g, repl);
+  var cache = {};
+  return query.replace(/(\?\??\??)/g, repl);
 
   function repl(str) {
-    var val = bindings[idx++] + "";
-    if (str == "?") {
-      val = val.replace(/'/g, "''");
-      str = "'" + val + "'";
-    } else if (str == "??") {
-      val = val.replace(/`/g, "``"); // is this correct?
-      str = "`" + val + "`";
-    } else if (str == "???") {
-      str = val; // raw
-    }
-    return str;
+    var val = bindings[idx++];
+    var quote = sql[str];
+    if (quote == null) return val; // raw
+    var re = cache[quote] || (cache[quote] = new RegExp(quote, "g"));
+    if ("string" !== typeof val) val += "";
+    return quote + val.replace(re, quote + quote) + quote;
   }
 };
+
+SQL.Pg = Pg;
+
+function Pg() {
+  var sql = this;
+  if (!(sql instanceof Pg)) sql = new Pg();
+  SQL.apply(sql, arguments);
+  return sql;
+}
+
+Pg.prototype = inherit(SQL.prototype);
+
+Pg.prototype["??"] = '"';
+
+function inherit(src) {
+  F.prototype = src;
+  return new F();
+  function F() {
+  }
+}

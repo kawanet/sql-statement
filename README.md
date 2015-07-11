@@ -16,6 +16,8 @@ console.log(sql + ""); // => "SELECT * FROM `users` WHERE id = 'AC3C21E7'"
 
 See [documentation](http://kawanet.github.io/sql-statement/SQL.html) for more detail.
 
+See [source](https://github.com/kawanet/sql-statement) at GitHub. PR welcomed.
+
 ### This DOES
 
 - This does build a SQL statement in safe. That's it.
@@ -32,11 +34,57 @@ See [documentation](http://kawanet.github.io/sql-statement/SQL.html) for more de
 npm install --save sql-statement
 ```
 
-### Repository
+## Examples
 
-- https://github.com/kawanet/sql-statement
+This module is tested with SQLite, MySQL and PostgreSQL.
 
-### License
+### With [SQLite](https://www.npmjs.com/package/sqlite3)
+
+```js
+var sqlite3 = require("sqlite3");
+var SQL = require("sql-statement");
+
+var db = new sqlite3.Database(":memory:");
+var sql = new SQL("SELECT * FROM users WHERE id = ?", id);
+
+db.all(sql+"", function(err, rows) {
+  if (err) return console.warn(err);
+  // do something
+});
+```
+
+### With [MySQL](https://www.npmjs.com/package/mysql)
+
+```js
+var mysql = require("mysql");
+var SQL = require("sql-statement");
+
+var conn = mysql.createConnection("mysql://user:pass@host/db");
+var sql = new SQL("SELECT * FROM users WHERE id = ?", id);
+
+conn.query(sql+"", function(err, result) {
+  if (err) return console.warn(err);
+  var rows = result.rows;
+  // do something
+});
+```
+
+### With [PostgreSQL](https://www.npmjs.com/package/pg)
+
+```js
+var pg = require("pg");
+var SQL = require("sql-statement").Pg; // PostgreSQL version
+
+var client = new pg.Client("postgres://user:pass@host/db");
+var sql = new SQL("SELECT * FROM users WHERE id = ?", id);
+
+client.query(sql+"", function(err, rows) {
+  if (err) return console.warn(err);
+  // do something
+});
+```
+
+## License
 
 The MIT License (MIT)
 
