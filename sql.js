@@ -2,10 +2,9 @@
 
 module.exports = SQL;
 
-var join = Array.prototype.join;
 var slice = Array.prototype.slice;
 var push = Array.prototype.push;
-var splice = Array.prototype.splice;
+var unshift = Array.prototype.unshift;
 
 /*jshint eqnull:true*/
 
@@ -33,7 +32,7 @@ var splice = Array.prototype.splice;
 function SQL(query, binding) {
   var sql = this;
   if (sql instanceof SQL) {
-    push.call(sql, "");
+    push.call(sql, "", []);
   } else {
     sql = new SQL();
   }
@@ -58,7 +57,7 @@ SQL.prototype.query = function() {
  */
 
 SQL.prototype.bindings = function() {
-  return slice.call(this, 1);
+  return this[1];
 };
 
 /**
@@ -80,7 +79,7 @@ SQL.prototype.prepend = function(query, binding) {
     this[0] = query + delim + this[0];
   }
   if (bindings.length) {
-    splice.call(this, 1, 0, bindings);
+    unshift.apply(this[1], bindings);
   }
   return this;
 };
@@ -104,7 +103,7 @@ SQL.prototype.append = function(query, binding) {
     this[0] = this[0] + delim + query;
   }
   if (bindings.length) {
-    push.apply(this, bindings);
+    push.apply(this[1], bindings);
   }
   return this;
 };
@@ -116,12 +115,13 @@ SQL.prototype.append = function(query, binding) {
  */
 
 SQL.prototype.toString = function() {
-  var sql = this;
-  var idx = 1;
-  return sql[0].replace(/(\?\??\??)/g, repl);
+  var sql = this[0];
+  var bindings = this[1];
+  var idx = 0;
+  return sql.replace(/(\?\??\??)/g, repl);
 
   function repl(str) {
-    var val = sql[idx++] + "";
+    var val = bindings[idx++] + "";
     if (str == "?") {
       val = val.replace(/'/g, "''");
       str = "'" + val + "'";
