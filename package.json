@@ -30,5 +30,15 @@
     "promisen": "0.0.8",
     "sqlite3": "^3.0.8",
     "uglify-js": "^2.4.23"
+  },
+  "jshintConfig": {
+    "undef": true,
+    "node": true,
+    "globals": {
+      "describe": true,
+      "it": true,
+      "window": true,
+      "Promise": true
+    }
   }
 }
