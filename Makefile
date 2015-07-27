@@ -2,6 +2,7 @@
 
 SRC=./sql.js
 TESTS=./test/*.js
+HINTS=$(SRC) $(TESTS) ./*.json
 JSHINT=./node_modules/.bin/jshint
 MOCHA=./node_modules/.bin/mocha
 JSDOC=./node_modules/.bin/jsdoc
@@ -19,7 +20,7 @@ mocha:
 	$(MOCHA) -R spec $(TESTS)
 
 jshint:
-	$(JSHINT) $(SRC) $(TESTS)
+	$(JSHINT) $(HINTS)
 
 jsdoc: $(DOC_HTML)
 
