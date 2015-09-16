@@ -1,6 +1,6 @@
-# sql-statement [![npm version](https://badge.fury.io/js/sql-statement.svg)](http://badge.fury.io/js/sql-statement) [![Build Status](https://travis-ci.org/kawanet/sql-statement.svg?branch=master)](https://travis-ci.org/kawanet/sql-statement)
+# sql-statement
 
-Tiny SQL Statement Builder
+Tiny SQL Statement Builder [![npm version](https://badge.fury.io/js/sql-statement.svg)](http://badge.fury.io/js/sql-statement) [![Build Status](https://travis-ci.org/kawanet/sql-statement.svg?branch=master)](https://travis-ci.org/kawanet/sql-statement)
 
 ### Usage
 
@@ -57,7 +57,7 @@ db.all(sql+"", function(err, rows) {
 
 ```js
 var mysql = require("mysql");
-var SQL = require("sql-statement");
+var SQL = require("sql-statement").mysql; // MySQL version
 
 var conn = mysql.createConnection("mysql://user:pass@host/db");
 var sql = new SQL("SELECT * FROM users WHERE id = ?", id);

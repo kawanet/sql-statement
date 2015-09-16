@@ -1,26 +1,11 @@
 {
   "name": "sql-statement",
-  "version": "0.1.0",
   "description": "Tiny SQL Statement Builder",
-  "main": "sql.js",
-  "scripts": {
-    "test": "make test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kawanet/sql-statement.git"
-  },
-  "keyword": [
-    "sql",
-    "mysql",
-    "sqlite",
-    "postgresql",
-    "pg",
-    "placeholder"
-  ],
+  "version": "0.1.1",
   "author": "@kawanet",
-  "license": "MIT",
-  "homepage": "https://github.com/kawanet/sql-statement",
+  "bugs": {
+    "url": "https://github.com/kawanet/sql-statement/issues"
+  },
   "devDependencies": {
     "jsdoc": "^3.3.2",
     "jshint": "^2.8.0",
@@ -31,14 +16,32 @@
     "sqlite3": "^3.0.8",
     "uglify-js": "^2.4.23"
   },
+  "homepage": "https://github.com/kawanet/sql-statement",
   "jshintConfig": {
-    "undef": true,
-    "node": true,
     "globals": {
       "describe": true,
       "it": true,
       "window": true,
       "Promise": true
-    }
+    },
+    "node": true,
+    "undef": true
+  },
+  "keywords": [
+    "mysql",
+    "pg",
+    "placeholder",
+    "postgresql",
+    "sql",
+    "sqlite"
+  ],
+  "license": "MIT",
+  "main": "sql.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kawanet/sql-statement.git"
+  },
+  "scripts": {
+    "test": "make test"
   }
 }
