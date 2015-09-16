@@ -1,7 +1,7 @@
 {
   "name": "sql-statement",
   "description": "Tiny SQL Statement Builder",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "@kawanet",
   "bugs": {
     "url": "https://github.com/kawanet/sql-statement/issues"

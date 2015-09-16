@@ -159,13 +159,13 @@ SQL.prototype.toString = function() {
 
   function repl(str) {
     var val = bindings[idx++];
+    if ("string" !== typeof val) val += "";
     if (sql._backslash) {
       val = val.replace(sql._backslash, "\\$1");
     }
     var quote = sql[str];
     if (quote == null) return val; // raw
     var re = cache[quote] || (cache[quote] = new RegExp(quote, "g"));
-    if ("string" !== typeof val) val += "";
     return quote + val.replace(re, quote + quote) + quote;
   }
 };
