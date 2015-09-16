@@ -8,6 +8,7 @@ var SQL = require("../sql");
 var SQ = "'";
 var DQ = '"';
 var AC = "`";
+var BS = "\\";
 
 describe(TESTNAME + " testing", function() {
   it(SQ, function() {
@@ -26,5 +27,12 @@ describe(TESTNAME + " testing", function() {
     assert.equal(SQL("??", DQ + DQ) + "", AC + DQ + DQ + AC);
     assert.equal(SQL.Pg("??", DQ) + "", DQ + DQ + DQ + DQ);
     assert.equal(SQL.Pg("??", DQ + DQ) + "", DQ + DQ + DQ + DQ + DQ + DQ);
+  });
+
+  it(BS, function() {
+    assert.equal(SQL("?", BS) + "", SQ + BS + SQ);
+    assert.equal(SQL("?", BS + BS) + "", SQ + BS + BS + SQ);
+    assert.equal(SQL.mysql("?", BS) + "", SQ + BS + BS + SQ);
+    assert.equal(SQL.mysql("?", BS + BS) + "", SQ + BS + BS + BS + BS + SQ);
   });
 });

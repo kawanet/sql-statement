@@ -42,6 +42,16 @@ describe(TESTNAME + " testing", function() {
       assert.equal(row.baz, "BAZ");
     })).catch(done);
   });
+
+  var sql4 = "SELECT ? AS `quote`";
+  var exp4 = "\"\'\\\"\'\\";
+  it("SQL(" + JSON.stringify(sql4) + ", " + JSON.stringify(exp4) + ")", function(done) {
+    var db = new sqlite3.Database(":memory:");
+    var sql = SQL(sql4, exp4);
+    promisen.denodeify(db.all).call(db, sql + "").then(wrap(done, function(rows) {
+      assert.equal(rows[0].quote, exp4);
+    })).catch(done);
+  });
 });
 
 function wrap(done, test) {

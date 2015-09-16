@@ -5,7 +5,7 @@ var mysql = require("mysql");
 var promisen = require("promisen");
 
 var TESTNAME = __filename.replace(/^.*\//, "");
-var SQL = require("../sql");
+var SQL = require("../sql").mysql;
 
 var config = {
   host: process.env.MYSQL_HOST,
@@ -50,6 +50,16 @@ describe(TESTNAME + suffix, function() {
       var row = rows[0];
       assert.equal(typeof row, "object");
       assert.equal(row.baz, "BAZ");
+    })).catch(done);
+  });
+
+  var sql4 = "SELECT ? AS `quote`";
+  var exp4 = "\"\'\\\"\'\\";
+  it("SQL(" + JSON.stringify(sql4) + ", " + JSON.stringify(exp4) + ")", function(done) {
+    var conn = mysql.createConnection(config);
+    var sql = SQL(sql4, exp4);
+    promisen.denodeify(conn.query).call(conn, sql + "").then(wrap(done, function(rows) {
+      assert.equal(rows[0].quote, exp4);
     })).catch(done);
   });
 });

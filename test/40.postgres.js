@@ -62,6 +62,20 @@ describe(TESTNAME + suffix, function() {
       })).catch(done);
     });
   });
+
+  var sql4 = 'SELECT ? AS "quote"';
+  var exp4 = "\"\'\\\"\'\\";
+  it("SQL(" + JSON.stringify(sql4) + ", " + JSON.stringify(exp4) + ")", function(done) {
+    var client = new pg.Client();
+    client.connect(function(err) {
+      if (err) return done(err);
+      var sql = SQL(sql4, exp4);
+      promisen.denodeify(client.query).call(client, sql + "").then(wrap(done, function(result) {
+        var rows = result.rows;
+        assert.equal(rows[0].quote, exp4);
+      })).catch(done);
+    });
+  });
 });
 
 function wrap(done, test) {

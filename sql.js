@@ -70,6 +70,12 @@ SQL.prototype["??"] = "`";
 SQL.prototype["???"] = void 0;
 
 /**
+ * @internal
+ */
+
+SQL.prototype._backslash = void 0;
+
+/**
  * This returns the string of SQL statement unformatted.
  *
  * @returns {string} SQL statement unformatted
@@ -153,6 +159,9 @@ SQL.prototype.toString = function() {
 
   function repl(str) {
     var val = bindings[idx++];
+    if (sql._backslash) {
+      val = val.replace(sql._backslash, "\\$1");
+    }
     var quote = sql[str];
     if (quote == null) return val; // raw
     var re = cache[quote] || (cache[quote] = new RegExp(quote, "g"));
@@ -173,6 +182,19 @@ function Pg() {
 Pg.prototype = inherit(SQL.prototype);
 
 Pg.prototype["??"] = '"';
+
+SQL.mysql = mysql;
+
+function mysql() {
+  var sql = this;
+  if (!(sql instanceof mysql)) sql = new mysql();
+  SQL.apply(sql, arguments);
+  return sql;
+}
+
+mysql.prototype = inherit(SQL.prototype);
+
+mysql.prototype._backslash = new RegExp("(\\\\)", "g");
 
 function inherit(src) {
   F.prototype = src;
