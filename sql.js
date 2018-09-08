@@ -2,6 +2,7 @@
 
 module.exports = SQL;
 
+var map = Array.prototype.map;
 var slice = Array.prototype.slice;
 var push = Array.prototype.push;
 var unshift = Array.prototype.unshift;
@@ -113,10 +114,10 @@ SQL.prototype.bindings = function() {
  * @returns {SQL} SQL object itself for method chaining
  */
 
-SQL.prototype.prepend = function(query, binding) {
+var prepend = SQL.prototype.prepend = function(query, binding) {
   var bindings = slice.call(arguments, 1);
   if (query instanceof SQL) {
-    this.prepend.apply(this, query);
+    prepend.apply(this, query);
     query = "";
   }
   if (query != null && query !== "") {
@@ -137,10 +138,10 @@ SQL.prototype.prepend = function(query, binding) {
  * @returns {SQL} SQL object itself for method chaining
  */
 
-SQL.prototype.append = function(query, binding) {
+var append = SQL.prototype.append = function(query, binding) {
   var bindings = slice.call(arguments, 1);
   if (query instanceof SQL) {
-    this.append.apply(this, query);
+    append.apply(this, query);
     query = "";
   }
   if (query != null && query !== "") {
@@ -151,6 +152,60 @@ SQL.prototype.append = function(query, binding) {
     push.apply(this[1], bindings);
   }
   return this;
+};
+
+/**
+ * This appends values of the list.
+ *
+ * @example
+ * var sql = new SQL("SELECT * FROM table WHERE id IN (");
+ * sql.appendList(array);
+ * sql.append(")");
+ *
+ * @param placeholder {string} typically: "?"
+ * @param array {string[]} value list
+ * @param [separator] {string} default: ", "
+ * @returns {SQL} SQL object itself for method chaining
+ */
+
+SQL.prototype.appendList = function(placeholder, array, separator) {
+  var query = map.call(array, function() {
+    return placeholder || "?";
+  }).join(separator || ", ");
+
+  var args = [query].concat(array);
+
+  return append.apply(this, args);
+};
+
+/**
+ * This appends key/value pairs of the object.
+ *
+ * @example
+ * var sql = new SQL("UPDATE table SET");
+ * sql.appendPairs(object);
+ *
+ * @example
+ * var sql = new SQL("SELECT * FROM table WHERE");
+ * sql.appendPairs(object, "?? = ?", " AND ");
+ *
+ * @param placeholder {string} typically: "?? = ?"
+ * @param object {Object} key/value object
+ * @param [separator] {string} default: ", "
+ * @returns {SQL} SQL object itself for method chaining
+ */
+
+SQL.prototype.appendPairs = function(placeholder, object, separator) {
+  var args = [];
+
+  var query = map.call(Object.keys(object), function(key) {
+    args.push(key, object[key]);
+    return placeholder || "?? = ?";
+  }).join(separator || ", ");
+
+  args.unshift(query);
+
+  return append.apply(this, args);
 };
 
 /**
@@ -213,6 +268,7 @@ mysql.prototype._backslash = new RegExp("(\\\\)", "g");
 function inherit(src) {
   F.prototype = src;
   return new F();
+
   function F() {
   }
 }

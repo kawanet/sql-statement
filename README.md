@@ -84,6 +84,31 @@ client.query(sql+"", function(err, rows) {
 });
 ```
 
+## appendList and appendPairs
+
+Since v0.2.0, This also provides helper methods: `appendList()` and `appendPairs()`.
+
+```js
+var keys = ["id", "name", "age"];
+var values = [123, 456, 789];
+
+var sql = new SQL("SELECT");
+sql.appendList("??", keys);
+sql.append("FROM table WHERE id IN (");
+sql.appendList("?", values);
+sql.append(")");
+```
+
+```js
+var object = {name: "Ken", age: 41};
+var condition = {id: 123};
+
+var sql = new SQL("UPDATE table SET");
+sql.appendPairs("?? = ?", object);
+sql.append("WHERE");
+sql.appendPairs("?? = ?", condition, " AND ");
+```
+
 ## License
 
 The MIT License (MIT)
