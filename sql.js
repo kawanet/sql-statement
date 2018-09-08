@@ -70,6 +70,16 @@ SQL.prototype["??"] = "`";
 SQL.prototype["???"] = void 0;
 
 /**
+ * This defines value for null and undefined.
+ *
+ * @name SQL.prototype.null
+ * @type {string}
+ * @default "NULL"
+ */
+
+SQL.prototype["null"] = "NULL";
+
+/**
  * @internal
  */
 
@@ -155,10 +165,14 @@ SQL.prototype.toString = function() {
   var bindings = this[1];
   var idx = 0;
   var cache = {};
+  var NULL = sql["null"];
   return query.replace(/(\?\??\??)/g, repl);
 
   function repl(str) {
     var val = bindings[idx++];
+
+    if (NULL && val == null) return NULL;
+
     if ("string" !== typeof val) val += "";
     if (sql._backslash) {
       val = val.replace(sql._backslash, "\\$1");
