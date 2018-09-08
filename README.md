@@ -125,9 +125,9 @@ const SQL = require("sql-statement").mysql;
 import {mysql as SQL} from "sql-statement";
 ```
 
-for PostgresQL
+for PostgreSQL
 
-```Pg
+```ts
 const SQL = require("sql-statement").Pg;
 // OR
 import {Pg as SQL} from "sql-statement";
