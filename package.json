@@ -43,5 +43,6 @@
   },
   "scripts": {
     "test": "make test"
-  }
+  },
+  "typings": "sql-statement.d.ts"
 }

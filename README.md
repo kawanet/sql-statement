@@ -109,6 +109,30 @@ sql.append("WHERE");
 sql.appendPairs("?? = ?", condition, " AND ");
 ```
 
+## TypeScript
+
+for SQLite
+
+```ts
+const SQL = require("sql-statement");
+```
+
+for MySQL
+
+```ts
+const SQL = require("sql-statement").mysql;
+// OR
+import {mysql as SQL} from "sql-statement";
+```
+
+for PostgresQL
+
+```Pg
+const SQL = require("sql-statement").Pg;
+// OR
+import {Pg as SQL} from "sql-statement";
+```
+
 ## License
 
 The MIT License (MIT)

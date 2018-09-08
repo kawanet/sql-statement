@@ -99,7 +99,7 @@ SQL.prototype.query = function() {
 /**
  * This returns the array of values for placeholders.
  *
- * @returns {Array} values for placeholders
+ * @returns {string[]} values for placeholders
  */
 
 SQL.prototype.bindings = function() {
