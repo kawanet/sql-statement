@@ -4,23 +4,23 @@
 
 type value = string | number | boolean;
 
-class SQL {
+declare class SQL {
     "?": string;
     "??": string;
     "???": string;
     "null": string;
 
-    constructor(query?: string, ...bindings?: value[]);
+    constructor(query?: string, ...bindings: value[]);
 
     query(): string;
 
     bindings(): string[];
 
-    prepend(query: string, ...bindings?: value[]): this;
+    prepend(query: string, ...bindings: value[]): this;
 
     prepend(sql: this): this;
 
-    append(query: string, ...bindings?: value[]): this;
+    append(query: string, ...bindings: value[]): this;
 
     append(sql: this): this;
 
@@ -29,12 +29,12 @@ class SQL {
     appendPairs(placeholder: string, object: any, separator?: string): this;
 }
 
-export class Pg extends SQL {
-    //
-}
+declare module SQL {
+    class Pg extends SQL {
+    }
 
-export class mysql extends SQL {
-    //
+    class mysql extends SQL {
+    }
 }
 
 export = SQL;
