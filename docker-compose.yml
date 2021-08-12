@@ -1,0 +1,58 @@
+# docker-compose.yml
+
+version: "2"
+
+networks:
+  sql-statement:
+
+volumes:
+  mysql-data-volume:
+  node-modules-volume:
+  npm-cache-volume:
+  postgresql-data-volume:
+
+services:
+  mysql:
+    image: "mariadb:10.6.4"
+    networks:
+      - "sql-statement"
+    hostname: "mysql"
+    volumes:
+      - "mysql-data-volume:/var/lib/mysql"
+    environment:
+      MYSQL_DATABASE: "test"
+      MYSQL_USER: "test"
+      MYSQL_PASSWORD: "test"
+      MYSQL_ROOT_PASSWORD: "root"
+
+  postgres:
+    image: "postgres:13.3"
+    networks:
+      - "sql-statement"
+    hostname: "postgres"
+    volumes:
+      - "postgresql-data-volume:/var/lib/postgresql"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "test"
+      POSTGRES_DB: "test"
+
+  node:
+    image: "node:16.6.1"
+    hostname: "node"
+    networks:
+      - "sql-statement"
+    volumes:
+      - "./:/sql-statement"
+      - "node-modules-volume:/sql-statement/node_modules"
+      - "npm-cache-volume:/.npm"
+    environment:
+      MYSQL_HOST: "mysql"
+      MYSQL_USER: "test"
+      MYSQL_PASSWORD: "test"
+      PGHOST: "postgres"
+      PGUSER: "postgres"
+      PGPASSWORD: "test"
+      PGDATABASE: "test"
+    command: ["bash", "-c", "cd /sql-statement && npm install && npm run build && npm test"]
+
