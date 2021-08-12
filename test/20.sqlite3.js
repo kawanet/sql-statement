@@ -2,7 +2,7 @@
 
 var assert = require("assert");
 var sqlite3 = require("sqlite3");
-var promisen = require("promisen");
+var promisify = require("util").promisify;
 
 var TESTNAME = __filename.replace(/^.*\//, "");
 var SQL = require("../sql");
@@ -21,9 +21,9 @@ describe(TESTNAME + " testing", function() {
   });
 
   var sql2 = new SQL("SELECT ? AS ??", "FOO", "foo");
-  it(sql2.query() + " -> promisen.denodeify(db.all).call(db, sql+'').then()", function(done) {
+  it(sql2.query() + " -> promisify(db.all).call(db, sql+'').then()", function(done) {
     var db = new sqlite3.Database(":memory:");
-    promisen.denodeify(db.all).call(db, sql2 + "").then(wrap(done, function(rows) {
+    promisify(db.all).call(db, sql2 + "").then(wrap(done, function(rows) {
       assert.equal(typeof rows, "object");
       var row = rows[0];
       assert.equal(typeof row, "object");
@@ -33,9 +33,9 @@ describe(TESTNAME + " testing", function() {
 
   // sqlite3 library does NOT support ??, double question marks
   var sql3 = new SQL("SELECT ? AS `baz`", "BAZ");
-  it(sql3.query() + " -> promisen.denodeify(db.all).apply(db, sql).then()", function(done) {
+  it(sql3.query() + " -> promisify(db.all).apply(db, sql).then()", function(done) {
     var db = new sqlite3.Database(":memory:");
-    promisen.denodeify(db.all).apply(db, sql3).then(wrap(done, function(rows) {
+    promisify(db.all).apply(db, sql3).then(wrap(done, function(rows) {
       assert.equal(typeof rows, "object");
       var row = rows[0];
       assert.equal(typeof row, "object");
@@ -48,7 +48,7 @@ describe(TESTNAME + " testing", function() {
   it("SQL(" + JSON.stringify(sql4) + ", " + JSON.stringify(exp4) + ")", function(done) {
     var db = new sqlite3.Database(":memory:");
     var sql = SQL(sql4, exp4);
-    promisen.denodeify(db.all).call(db, sql + "").then(wrap(done, function(rows) {
+    promisify(db.all).call(db, sql + "").then(wrap(done, function(rows) {
       assert.equal(rows[0].quote, exp4);
     })).catch(done);
   });

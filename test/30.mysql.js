@@ -2,7 +2,7 @@
 
 var assert = require("assert");
 var mysql = require("mysql");
-var promisen = require("promisen");
+var promisify = require("util").promisify;
 
 var TESTNAME = __filename.replace(/^.*\//, "");
 var SQL = require("../sql").mysql;
@@ -32,9 +32,9 @@ describe(TESTNAME + suffix, function() {
   });
 
   var sql2 = new SQL("SELECT ? AS ??", "FOO", "foo");
-  it(sql2.query() + " -> promisen.denodeify(conn.query).call(conn, sql+'').then()", function(done) {
+  it(sql2.query() + " -> promisify(conn.query).call(conn, sql+'').then()", function(done) {
     var conn = mysql.createConnection(config);
-    promisen.denodeify(conn.query).call(conn, sql2 + "").then(wrap(done, function(rows) {
+    promisify(conn.query).call(conn, sql2 + "").then(wrap(done, function(rows) {
       assert.equal(typeof rows, "object");
       var row = rows[0];
       assert.equal(typeof row, "object");
@@ -43,9 +43,9 @@ describe(TESTNAME + suffix, function() {
   });
 
   var sql3 = new SQL("SELECT ? AS ??", "BAZ", "baz");
-  it(sql3.query() + " -> promisen.denodeify(conn.query).apply(conn, sql).then()", function(done) {
+  it(sql3.query() + " -> promisify(conn.query).apply(conn, sql).then()", function(done) {
     var conn = mysql.createConnection(config);
-    promisen.denodeify(conn.query).apply(conn, sql3).then(wrap(done, function(rows) {
+    promisify(conn.query).apply(conn, sql3).then(wrap(done, function(rows) {
       assert.equal(typeof rows, "object");
       var row = rows[0];
       assert.equal(typeof row, "object");
@@ -58,7 +58,7 @@ describe(TESTNAME + suffix, function() {
   it("SQL(" + JSON.stringify(sql4) + ", " + JSON.stringify(exp4) + ")", function(done) {
     var conn = mysql.createConnection(config);
     var sql = SQL(sql4, exp4);
-    promisen.denodeify(conn.query).call(conn, sql + "").then(wrap(done, function(rows) {
+    promisify(conn.query).call(conn, sql + "").then(wrap(done, function(rows) {
       assert.equal(rows[0].quote, exp4);
     })).catch(done);
   });

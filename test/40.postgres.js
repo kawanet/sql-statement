@@ -2,7 +2,7 @@
 
 var assert = require("assert");
 var pg = require("pg");
-var promisen = require("promisen");
+var promisify = require("util").promisify;
 
 var TESTNAME = __filename.replace(/^.*\//, "");
 var SQL = require("../sql").Pg;
@@ -32,11 +32,11 @@ describe(TESTNAME + suffix, function() {
   // pg library has completely difference style of placeholder
 
   var sql2 = new SQL('SELECT ? AS ??', "FOO", "foo");
-  it(sql2.query() + " -> promisen.denodeify(client.query).call(client, sql+'').then()", function(done) {
+  it(sql2.query() + " -> promisify(client.query).call(client, sql+'').then()", function(done) {
     var client = new pg.Client();
     client.connect(function(err) {
       if (err) return done(err);
-      promisen.denodeify(client.query).call(client, sql2 + "").then(wrap(done, function(result) {
+      promisify(client.query).call(client, sql2 + "").then(wrap(done, function(result) {
         var rows = result.rows;
         assert.equal(typeof rows, "object");
         var row = rows[0];
@@ -49,11 +49,11 @@ describe(TESTNAME + suffix, function() {
   // pg library has completely difference style of placeholder
 
   var sql3 = new SQL("SELECT $1::text AS \"baz\"", "BAZ");
-  it(sql3.query() + " -> promisen.denodeify(client.query).apply(client, sql).then()", function(done) {
+  it(sql3.query() + " -> promisify(client.query).apply(client, sql).then()", function(done) {
     var client = new pg.Client();
     client.connect(function(err) {
       if (err) return done(err);
-      promisen.denodeify(client.query).apply(client, sql3).then(wrap(done, function(result) {
+      promisify(client.query).apply(client, sql3).then(wrap(done, function(result) {
         var rows = result.rows;
         assert.equal(typeof rows, "object");
         var row = rows[0];
@@ -70,7 +70,7 @@ describe(TESTNAME + suffix, function() {
     client.connect(function(err) {
       if (err) return done(err);
       var sql = SQL(sql4, exp4);
-      promisen.denodeify(client.query).call(client, sql + "").then(wrap(done, function(result) {
+      promisify(client.query).call(client, sql + "").then(wrap(done, function(result) {
         var rows = result.rows;
         assert.equal(rows[0].quote, exp4);
       })).catch(done);
