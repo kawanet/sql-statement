@@ -2,23 +2,25 @@
  * Tiny SQL Statement Builder
  */
 
-declare class SQL {
+type value = string | number;
+
+class SQL {
     "?": string;
     "??": string;
     "???": string;
     "null": string;
 
-    constructor(query?: string, ...bindings: string[]);
+    constructor(query?: string, ...bindings?: value[]);
 
     query(): string;
 
     bindings(): string[];
 
-    prepend(query: string, ...bindings: string[]): this;
+    prepend(query: string, ...bindings?: value[]): this;
 
     prepend(sql: this): this;
 
-    append(query: string, ...bindings: string[]): this;
+    append(query: string, ...bindings?: value[]): this;
 
     append(sql: this): this;
 
@@ -27,15 +29,12 @@ declare class SQL {
     appendPairs(placeholder: string, object: any, separator?: string): this;
 }
 
-declare module sql_statement {
-    class Pg extends SQL {
-    }
-
-    class mysql extends SQL {
-    }
+export class Pg extends SQL {
+    //
 }
 
-declare interface sql_statement extends SQL {
+export class mysql extends SQL {
+    //
 }
 
-export = sql_statement;
+export = SQL;

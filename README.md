@@ -5,11 +5,11 @@ Tiny SQL Statement Builder [![npm version](https://badge.fury.io/js/sql-statemen
 ### Usage
 
 ```js
-var SQL = require("sql-statement");
+const SQL = require("sql-statement").mysql;
 
-var tableName = "users";
-var id = "AC3C21E7";
-var sql = new SQL();
+const tableName = "users";
+const id = "AC3C21E7";
+const sql = new SQL();
 sql.append("SELECT * FROM ?? WHERE id = ?", tableName, id);
 console.log(sql + ""); // => "SELECT * FROM `users` WHERE id = 'AC3C21E7'"
 ```
@@ -41,11 +41,11 @@ This module is tested with SQLite, MySQL and PostgreSQL.
 ### With [SQLite](https://www.npmjs.com/package/sqlite3)
 
 ```js
-var sqlite3 = require("sqlite3");
-var SQL = require("sql-statement");
+const sqlite3 = require("sqlite3");
+const SQL = require("sql-statement");
 
-var db = new sqlite3.Database(":memory:");
-var sql = new SQL("SELECT * FROM users WHERE id = ?", id);
+const db = new sqlite3.Database(":memory:");
+const sql = new SQL("SELECT * FROM users WHERE id = ?", id);
 
 db.all(sql+"", function(err, rows) {
   if (err) return console.warn(err);
@@ -56,15 +56,15 @@ db.all(sql+"", function(err, rows) {
 ### With [MySQL](https://www.npmjs.com/package/mysql)
 
 ```js
-var mysql = require("mysql");
-var SQL = require("sql-statement").mysql; // MySQL version
+const mysql = require("mysql");
+const SQL = require("sql-statement").mysql; // MySQL version
 
-var conn = mysql.createConnection("mysql://user:pass@host/db");
-var sql = new SQL("SELECT * FROM users WHERE id = ?", id);
+const conn = mysql.createConnection("mysql://user:pass@host/db");
+const sql = new SQL("SELECT * FROM users WHERE id = ?", id);
 
 conn.query(sql+"", function(err, result) {
   if (err) return console.warn(err);
-  var rows = result.rows;
+  const rows = result.rows;
   // do something
 });
 ```
@@ -72,11 +72,11 @@ conn.query(sql+"", function(err, result) {
 ### With [PostgreSQL](https://www.npmjs.com/package/pg)
 
 ```js
-var pg = require("pg");
-var SQL = require("sql-statement").Pg; // PostgreSQL version
+const pg = require("pg");
+const SQL = require("sql-statement").Pg; // PostgreSQL version
 
-var client = new pg.Client("postgres://user:pass@host/db");
-var sql = new SQL("SELECT * FROM users WHERE id = ?", id);
+const client = new pg.Client("postgres://user:pass@host/db");
+const sql = new SQL("SELECT * FROM users WHERE id = ?", id);
 
 client.query(sql+"", function(err, rows) {
   if (err) return console.warn(err);
@@ -89,10 +89,10 @@ client.query(sql+"", function(err, rows) {
 Since v0.2.0, This also provides helper methods: `appendList()` and `appendPairs()`.
 
 ```js
-var keys = ["id", "name", "age"];
-var values = [123, 456, 789];
+const keys = ["id", "name", "age"];
+const values = [123, 456, 789];
 
-var sql = new SQL("SELECT");
+const sql = new SQL("SELECT");
 sql.appendList("??", keys);
 sql.append("FROM table WHERE id IN (");
 sql.appendList("?", values);
@@ -100,10 +100,10 @@ sql.append(")");
 ```
 
 ```js
-var object = {name: "Ken", age: 41};
-var condition = {id: 123};
+const object = {name: "Ken", age: 41};
+const condition = {id: 123};
 
-var sql = new SQL("UPDATE table SET");
+const sql = new SQL("UPDATE table SET");
 sql.appendPairs("?? = ?", object);
 sql.append("WHERE");
 sql.appendPairs("?? = ?", condition, " AND ");
@@ -114,22 +114,20 @@ sql.appendPairs("?? = ?", condition, " AND ");
 for SQLite
 
 ```ts
-const SQL = require("sql-statement");
+import * as SQL from "sql-statement";
+// OR
+import SQL = require("sql-statement");
 ```
 
 for MySQL
 
 ```ts
-const SQL = require("sql-statement").mysql;
-// OR
 import {mysql as SQL} from "sql-statement";
 ```
 
 for PostgreSQL
 
 ```ts
-const SQL = require("sql-statement").Pg;
-// OR
 import {Pg as SQL} from "sql-statement";
 ```
 

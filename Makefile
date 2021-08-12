@@ -2,7 +2,7 @@
 
 SRC=./sql.js
 TESTS=./test/*.js
-HINTS=$(SRC) $(TESTS) ./*.json
+HINTS=$(SRC) ./*.json
 JSHINT=./node_modules/.bin/jshint
 MOCHA=./node_modules/.bin/mocha
 JSDOC=./node_modules/.bin/jsdoc
