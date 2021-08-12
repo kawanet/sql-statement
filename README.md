@@ -1,6 +1,9 @@
 # sql-statement
 
-Tiny SQL Statement Builder [![npm version](https://badge.fury.io/js/sql-statement.svg)](http://badge.fury.io/js/sql-statement) [![Build Status](https://travis-ci.org/kawanet/sql-statement.svg?branch=master)](https://travis-ci.org/kawanet/sql-statement)
+[![npm version](https://badge.fury.io/js/sql-statement.svg)](http://badge.fury.io/js/sql-statement)
+[![Node.js CI](https://github.com/kawanet/sql-statement/workflows/Node.js%20CI/badge.svg?branch=master)](https://github.com/kawanet/sql-statement/actions/)
+
+Tiny SQL Statement Builder
 
 ### Usage
 
@@ -135,7 +138,7 @@ import {Pg as SQL} from "sql-statement";
 
 The MIT License (MIT)
 
-Copyright (c) 2013-2018 Yusuke Kawasaki
+Copyright (c) 2013-2021 Yusuke Kawasaki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
