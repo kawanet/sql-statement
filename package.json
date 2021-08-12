@@ -1,20 +1,19 @@
 {
   "name": "sql-statement",
   "description": "Tiny SQL Statement Builder",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "@kawanet",
   "bugs": {
     "url": "https://github.com/kawanet/sql-statement/issues"
   },
   "devDependencies": {
-    "jsdoc": "^3.5.5",
-    "jshint": "^2.9.6",
-    "mocha": "^5.2.0",
-    "mysql": "^2.16.0",
-    "pg": "^7.4.3",
+    "jsdoc": "^3.6.7",
+    "jshint": "^2.13.1",
+    "mocha": "^9.0.3",
+    "mysql": "^2.18.1",
+    "pg": "^8.7.1",
     "promisen": "^0.1.1",
-    "sqlite3": "^4.0.2",
-    "uglify-js": "^3.4.9"
+    "sqlite3": "^5.0.2"
   },
   "homepage": "https://github.com/kawanet/sql-statement",
   "jshintConfig": {

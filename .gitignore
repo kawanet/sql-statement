@@ -1,5 +1,12 @@
+*.tgz
 *~
-node_modules/
 .DS_Store
+.Thumbs
+._*
 .idea/
+.vscode/
 gh-pages/
+node_modules/
+npm-debug.log*
+package-lock.json
+~$*
