@@ -4,7 +4,7 @@ var assert = require("assert");
 var sqlite3 = require("sqlite3");
 var promisify = require("util").promisify;
 
-var TESTNAME = __filename.replace(/^.*\//, "");
+var TESTNAME = __filename.split("/").pop();
 var SQL = require("../sql");
 
 describe(TESTNAME + " testing", function() {

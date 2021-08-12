@@ -2,7 +2,7 @@
 
 var assert = require("assert");
 
-var TESTNAME = __filename.replace(/^.*\//, "");
+var TESTNAME = __filename.split("/").pop();
 var SQL = require("../sql");
 
 var SQ = "'";

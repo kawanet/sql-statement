@@ -16,12 +16,7 @@
   },
   "homepage": "https://github.com/kawanet/sql-statement",
   "jshintConfig": {
-    "globals": {
-      "describe": true,
-      "it": true,
-      "window": true,
-      "Promise": true
-    },
+    "mocha": true,
     "node": true,
     "undef": true
   },

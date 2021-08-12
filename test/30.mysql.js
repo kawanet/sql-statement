@@ -4,7 +4,7 @@ var assert = require("assert");
 var mysql = require("mysql");
 var promisify = require("util").promisify;
 
-var TESTNAME = __filename.replace(/^.*\//, "");
+var TESTNAME = __filename.split("/").pop();
 var SQL = require("../sql").mysql;
 
 var config = {
@@ -15,10 +15,10 @@ var config = {
 };
 
 var go = !!config.host;
-if (!go) describe = describe.skip;
+var DESCRIBE = go ? describe : describe.skip;
 var suffix = go ? " testing" : " skipped. To test this, please set MYSQL_HOST=127.0.0.1";
 
-describe(TESTNAME + suffix, function() {
+DESCRIBE(TESTNAME + suffix, function() {
   var sql1 = new SQL("SELECT ? AS ??", "BAR", "bar");
   it(sql1.query() + " -> conn.query(sql+'', callback)", function(done) {
     var conn = mysql.createConnection(config);

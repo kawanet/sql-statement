@@ -4,14 +4,14 @@ var assert = require("assert");
 var pg = require("pg");
 var promisify = require("util").promisify;
 
-var TESTNAME = __filename.replace(/^.*\//, "");
+var TESTNAME = __filename.split("/").pop();
 var SQL = require("../sql").Pg;
 
 var go = process.env.PGHOST || process.env.PGDATABASE;
-if (!go) describe = describe.skip;
+var DESCRIBE = go ? describe : describe.skip;
 var suffix = go ? " testing" : " skipped. To test this, please set PGHOST=127.0.0.1 PGDATABASE=test";
 
-describe(TESTNAME + suffix, function() {
+DESCRIBE(TESTNAME + suffix, function() {
   var sql1 = new SQL('SELECT ? AS ??', "FOO", "foo");
   it(sql1.query() + " -> client.query(sql+'', callback)", function(done) {
     var client = new pg.Client();
