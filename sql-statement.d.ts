@@ -2,7 +2,7 @@
  * Tiny SQL Statement Builder
  */
 
-type value = string | number;
+type value = string | number | boolean;
 
 class SQL {
     "?": string;

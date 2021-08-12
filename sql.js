@@ -228,6 +228,8 @@ SQL.prototype.toString = function() {
 
     if (NULL && val == null) return NULL;
 
+    if ("boolean" === typeof val) return val;
+
     if ("string" !== typeof val) val += "";
     if (sql._backslash) {
       val = val.replace(sql._backslash, "\\$1");
