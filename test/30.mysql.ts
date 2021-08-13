@@ -10,7 +10,7 @@ const TESTNAME = __filename.split("/").pop();
 
 const config: mysql.ConnectionConfig = {
     host: process.env.MYSQL_HOST,
-    port: +process.env.MYSQL_PORT,
+    port: +(process.env.MYSQL_PORT as string) || undefined,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD
 };

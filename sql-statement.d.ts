@@ -2,7 +2,7 @@
  * Tiny SQL Statement Builder
  */
 
-type value = string | number | boolean;
+type value = string | number | boolean | null | undefined;
 
 declare class SQL {
     "?": string;
