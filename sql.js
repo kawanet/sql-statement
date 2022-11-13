@@ -229,6 +229,9 @@ SQL.prototype.toString = function() {
 
     if ("boolean" === typeof val) return val;
 
+    // allow numbers
+    if ("number" === typeof val && isFinite(val)) return val;
+
     if ("string" !== typeof val) val += "";
     if (sql._backslash) {
       val = val.replace(sql._backslash, "\\$1");
