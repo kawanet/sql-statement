@@ -5,7 +5,6 @@ module.exports = SQL;
 var map = Array.prototype.map;
 var slice = Array.prototype.slice;
 var push = Array.prototype.push;
-var unshift = Array.prototype.unshift;
 
 /*jshint eqnull:true*/
 
@@ -117,15 +116,15 @@ SQL.prototype.bindings = function() {
 var prepend = SQL.prototype.prepend = function(query, binding) {
   var bindings = slice.call(arguments, 1);
   if (query instanceof SQL) {
-    prepend.apply(this, query);
-    query = "";
+    bindings = query[1];
+    query = query[0];
   }
   if (query != null && query !== "") {
     var delim = (this[0] === "") ? "" : " ";
     this[0] = query + delim + this[0];
   }
   if (bindings.length) {
-    unshift.apply(this[1], bindings);
+    this[1] = [].concat(bindings, this[1]);
   }
   return this;
 };
@@ -141,15 +140,15 @@ var prepend = SQL.prototype.prepend = function(query, binding) {
 var append = SQL.prototype.append = function(query, binding) {
   var bindings = slice.call(arguments, 1);
   if (query instanceof SQL) {
-    append.apply(this, query);
-    query = "";
+    bindings = query[1];
+    query = query[0];
   }
   if (query != null && query !== "") {
     var delim = (this[0] === "") ? "" : " ";
     this[0] = this[0] + delim + query;
   }
   if (bindings.length) {
-    push.apply(this[1], bindings);
+    this[1] = [].concat(this[1], bindings);
   }
   return this;
 };
@@ -229,6 +228,9 @@ SQL.prototype.toString = function() {
     if (NULL && val == null) return NULL;
 
     if ("boolean" === typeof val) return val;
+
+    // allow numbers
+    if ("number" === typeof val && isFinite(val)) return val;
 
     if ("string" !== typeof val) val += "";
     if (sql._backslash) {

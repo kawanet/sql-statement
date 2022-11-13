@@ -14,7 +14,8 @@ const tableName = "users";
 const id = "AC3C21E7";
 const sql = new SQL();
 sql.append("SELECT * FROM ?? WHERE id = ?", tableName, id);
-console.log(sql + ""); // => "SELECT * FROM `users` WHERE id = 'AC3C21E7'"
+
+console.log(String(sql)); // => "SELECT * FROM `users` WHERE id = 'AC3C21E7'"
 ```
 
 See [documentation](http://kawanet.github.io/sql-statement/SQL.html) for more detail.
@@ -50,7 +51,7 @@ const SQL = require("sql-statement");
 const db = new sqlite3.Database(":memory:");
 const sql = new SQL("SELECT * FROM users WHERE id = ?", id);
 
-db.all(sql+"", function(err, rows) {
+db.all(String(sql), function(err, rows) {
   if (err) return console.warn(err);
   // do something
 });
@@ -65,7 +66,7 @@ const SQL = require("sql-statement").mysql; // MySQL version
 const conn = mysql.createConnection("mysql://user:pass@host/db");
 const sql = new SQL("SELECT * FROM users WHERE id = ?", id);
 
-conn.query(sql+"", function(err, result) {
+conn.query(String(sql), function(err, result) {
   if (err) return console.warn(err);
   const rows = result.rows;
   // do something
@@ -81,7 +82,7 @@ const SQL = require("sql-statement").Pg; // PostgreSQL version
 const client = new pg.Client("postgres://user:pass@host/db");
 const sql = new SQL("SELECT * FROM users WHERE id = ?", id);
 
-client.query(sql+"", function(err, rows) {
+client.query(String(sql), function(err, rows) {
   if (err) return console.warn(err);
   // do something
 });
@@ -100,6 +101,8 @@ sql.appendList("??", keys);
 sql.append("FROM table WHERE id IN (");
 sql.appendList("?", values);
 sql.append(")");
+
+console.log(String(sql)); // => SELECT `id`, `name`, `age` FROM table WHERE id IN ( 123, 456, 789 )
 ```
 
 ```js
@@ -110,6 +113,8 @@ const sql = new SQL("UPDATE table SET");
 sql.appendPairs("?? = ?", object);
 sql.append("WHERE");
 sql.appendPairs("?? = ?", condition, " AND ");
+
+console.log(String(sql)); // => UPDATE table SET `name` = 'Ken', `age` = 41 WHERE `id` = 123
 ```
 
 ## TypeScript
@@ -138,7 +143,7 @@ import {Pg as SQL} from "sql-statement";
 
 The MIT License (MIT)
 
-Copyright (c) 2013-2021 Yusuke Kawasaki
+Copyright (c) 2013-2022 Yusuke Kawasaki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -28,26 +28,26 @@ describe(TESTNAME + " testing", () => {
         let sql = new SQL();
         sql = sql.append("SELECT * FROM table WHERE id = ?", 123);
         assert.ok(sql instanceof SQL);
-        assert.equal(sql + "", "SELECT * FROM table WHERE id = '123'");
+        assert.equal(sql + "", "SELECT * FROM table WHERE id = 123");
         sql.append("AND ?? = 'f'", "deleted");
-        assert.equal(sql + "", "SELECT * FROM table WHERE id = '123' AND `deleted` = 'f'");
+        assert.equal(sql + "", "SELECT * FROM table WHERE id = 123 AND `deleted` = 'f'");
         sql.append("ORDER BY created_at");
-        assert.equal(sql + "", "SELECT * FROM table WHERE id = '123' AND `deleted` = 'f' ORDER BY created_at");
+        assert.equal(sql + "", "SELECT * FROM table WHERE id = 123 AND `deleted` = 'f' ORDER BY created_at");
         sql.append(new SQL("LIMIT ?", 10));
-        assert.equal(sql + "", "SELECT * FROM table WHERE id = '123' AND `deleted` = 'f' ORDER BY created_at LIMIT '10'");
+        assert.equal(sql + "", "SELECT * FROM table WHERE id = 123 AND `deleted` = 'f' ORDER BY created_at LIMIT 10");
     });
 
     it("prepend()", () => {
         let sql = new SQL();
         sql = sql.prepend("LIMIT ?", 10);
         assert.ok(sql instanceof SQL);
-        assert.equal(sql + "", "LIMIT '10'");
+        assert.equal(sql + "", "LIMIT 10");
         sql.prepend("ORDER BY created_at");
-        assert.equal(sql + "", "ORDER BY created_at LIMIT '10'");
+        assert.equal(sql + "", "ORDER BY created_at LIMIT 10");
         sql.prepend("?? = 'f'", "deleted");
-        assert.equal(sql + "", "`deleted` = 'f' ORDER BY created_at LIMIT '10'");
+        assert.equal(sql + "", "`deleted` = 'f' ORDER BY created_at LIMIT 10");
         sql.prepend(new SQL("SELECT * FROM table WHERE id = ? AND", 123));
-        assert.equal(sql + "", "SELECT * FROM table WHERE id = '123' AND `deleted` = 'f' ORDER BY created_at LIMIT '10'");
+        assert.equal(sql + "", "SELECT * FROM table WHERE id = 123 AND `deleted` = 'f' ORDER BY created_at LIMIT 10");
     });
 
     it("query()", () => {
