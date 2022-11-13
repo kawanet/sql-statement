@@ -7,18 +7,18 @@
     "url": "https://github.com/kawanet/sql-statement/issues"
   },
   "devDependencies": {
-    "@types/mocha": "^9.0.0",
-    "@types/mysql": "^2.15.19",
-    "@types/node": "^16.6.0",
-    "@types/pg": "^8.6.1",
-    "@types/sqlite3": "^3.1.7",
-    "jsdoc": "^3.6.7",
-    "jshint": "^2.13.1",
-    "mocha": "^9.0.3",
+    "@types/mocha": "^10.0.0",
+    "@types/mysql": "^2.15.21",
+    "@types/node": "^18.11.9",
+    "@types/pg": "^8.6.5",
+    "@types/sqlite3": "^3.1.8",
+    "jsdoc": "^4.0.0",
+    "jshint": "^2.13.6",
+    "mocha": "^10.1.0",
     "mysql": "^2.18.1",
-    "pg": "^8.7.1",
-    "sqlite3": "^5.0.2",
-    "typescript": "^4.3.5"
+    "pg": "^8.8.0",
+    "sqlite3": "^5.1.2",
+    "typescript": "^4.8.4"
   },
   "files": [
     "LICENSE",
