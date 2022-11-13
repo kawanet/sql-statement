@@ -47,7 +47,9 @@
     "url": "https://github.com/kawanet/sql-statement.git"
   },
   "scripts": {
+    "fixpck": "fixpck",
     "build": "./node_modules/.bin/tsc -p .",
+    "prepack": "npm run build && npm test",
     "test": "make test"
   },
   "typings": "sql-statement.d.ts"
