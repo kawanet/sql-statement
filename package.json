@@ -20,9 +20,14 @@
     "sqlite3": "^5.1.4",
     "typescript": "^4.9.5"
   },
+  "exports": {
+    "import": "./esm/sql.mjs",
+    "require": "./sql.js"
+  },
   "files": [
     "LICENSE",
     "README.md",
+    "esm/*.mjs",
     "*.js",
     "*.d.ts"
   ],
@@ -49,8 +54,8 @@
     "url": "https://github.com/kawanet/sql-statement.git"
   },
   "scripts": {
+    "build": "make",
     "fixpck": "fixpck",
-    "build": "./node_modules/.bin/tsc -p .",
     "prepack": "npm run build && npm test",
     "test": "make test"
   },
