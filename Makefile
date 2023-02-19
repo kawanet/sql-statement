@@ -2,9 +2,6 @@
 
 SRC=./sql.js
 TESTS=./test/*.js
-JSHINT=./node_modules/.bin/jshint
-MOCHA=./node_modules/.bin/mocha
-JSDOC=./node_modules/.bin/jsdoc
 
 DOCS_DIR=./gh-pages
 DOC_HTML=./gh-pages/SQL.html
@@ -20,21 +17,20 @@ esm/sql.mjs: sql.js
 	perl -i -pe 's#^(function SQL)#export default $$1#' $@
 	perl -i -pe 's#^(function (Pg|mysql))#export $$1#' $@
 
-test: all jshint mocha
+test: all $(TESTS)
+	node_modules/.bin/jshint $(SRC)
+	node_modules/.bin/mocha -R spec $(TESTS)
 	node -e 'Promise.resolve(require("./sql.js")).then(SQL => console.log(String(SQL("SELECT NOW()"))))'
 	node -e 'import("./esm/sql.mjs").then(x => console.log(String(x.default("SELECT NOW()"))))'
 
-mocha:
-	$(MOCHA) -R spec $(TESTS)
-
-jshint:
-	$(JSHINT) $(SRC)
+./test/%.js: ./test/%.ts
+	./node_modules/.bin/tsc -p tsconfig.json
 
 jsdoc: $(DOC_HTML)
 
 $(DOC_HTML): README.md $(SRC) $(DOCS_CSS_SRC)
 	mkdir -p $(DOCS_DIR)
-	$(JSDOC) -d $(DOCS_DIR) -R README.md $(SRC)
+	node_modules/.bin/jsdoc -d $(DOCS_DIR) -R README.md $(SRC)
 	cat $(DOCS_CSS_SRC) >> $(DOCS_CSS_DEST)
 	rm -f $(DOCS_DIR)/*.js.html
 	for f in $(DOCS_DIR)/*.html; do sed 's#</a> on .* 201.* GMT.*##' < $$f > $$f~ && mv $$f~ $$f; done
@@ -43,4 +39,4 @@ $(DOC_HTML): README.md $(SRC) $(DOCS_CSS_SRC)
 clean:
 	/bin/rm -f esm/sql.mjs
 
-.PHONY: all test jshint mocha
+.PHONY: all test clean
