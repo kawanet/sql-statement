@@ -28,9 +28,11 @@
   ],
   "homepage": "https://github.com/kawanet/sql-statement",
   "jshintConfig": {
+    "esversion": 6,
     "mocha": true,
     "node": true,
-    "undef": true
+    "undef": true,
+    "unused": false
   },
   "keywords": [
     "mysql",

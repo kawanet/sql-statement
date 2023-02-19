@@ -2,9 +2,9 @@
 
 module.exports = SQL;
 
-var map = Array.prototype.map;
-var slice = Array.prototype.slice;
-var push = Array.prototype.push;
+const map = Array.prototype.map;
+const slice = Array.prototype.slice;
+const push = Array.prototype.push;
 
 /*jshint eqnull:true*/
 
@@ -15,22 +15,22 @@ var push = Array.prototype.push;
  * @param [binding] {...string} value(s) to fulfill placeholder(s) of the statement
  * @constructor
  * @example
- * var SQL = require("sql-statement");
+ * const SQL = require("sql-statement");
  *
- * var id = "123";
- * var sql = SQL("SELECT * FROM users WHERE id = ?", id);
+ * const id = "123";
+ * const sql = SQL("SELECT * FROM users WHERE id = ?", id);
  *
  * console.log("SQL: " + sql); // => SQL: SELECT * FROM users WHERE id = '123'
  *
- * var key = "group_id";
- * var grp = [45, 67, 89].join(", ");
+ * const key = "group_id";
+ * const grp = [45, 67, 89].join(", ");
  * sql.append("AND ?? IN (???)", key, grp);
  *
  * console.log("SQL: " + sql); // => SQL: SELECT * FROM users WHERE id = '123' AND `group_id` IN (45, 67, 89)
  */
 
 function SQL(query, binding) {
-  var sql = this;
+  let sql = this;
   if (!(sql instanceof SQL)) sql = new SQL();
   if (!sql.length) push.call(sql, "", []);
   if (arguments.length) sql.append.apply(sql, arguments);
@@ -113,14 +113,14 @@ SQL.prototype.bindings = function() {
  * @returns {SQL} SQL object itself for method chaining
  */
 
-var prepend = SQL.prototype.prepend = function(query, binding) {
-  var bindings = slice.call(arguments, 1);
+const prepend = SQL.prototype.prepend = function(query, binding) {
+  let bindings = slice.call(arguments, 1);
   if (query instanceof SQL) {
     bindings = query[1];
     query = query[0];
   }
   if (query != null && query !== "") {
-    var delim = (this[0] === "") ? "" : " ";
+    const delim = (this[0] === "") ? "" : " ";
     this[0] = query + delim + this[0];
   }
   if (bindings.length) {
@@ -137,14 +137,14 @@ var prepend = SQL.prototype.prepend = function(query, binding) {
  * @returns {SQL} SQL object itself for method chaining
  */
 
-var append = SQL.prototype.append = function(query, binding) {
-  var bindings = slice.call(arguments, 1);
+const append = SQL.prototype.append = function(query, binding) {
+  let bindings = slice.call(arguments, 1);
   if (query instanceof SQL) {
     bindings = query[1];
     query = query[0];
   }
   if (query != null && query !== "") {
-    var delim = (this[0] === "") ? "" : " ";
+    const delim = (this[0] === "") ? "" : " ";
     this[0] = this[0] + delim + query;
   }
   if (bindings.length) {
@@ -157,7 +157,7 @@ var append = SQL.prototype.append = function(query, binding) {
  * This appends values of the list.
  *
  * @example
- * var sql = new SQL("SELECT * FROM table WHERE id IN (");
+ * const sql = new SQL("SELECT * FROM table WHERE id IN (");
  * sql.appendList(array);
  * sql.append(")");
  *
@@ -168,11 +168,11 @@ var append = SQL.prototype.append = function(query, binding) {
  */
 
 SQL.prototype.appendList = function(placeholder, array, separator) {
-  var query = map.call(array, function() {
+  const query = map.call(array, function() {
     return placeholder || "?";
   }).join(separator || ", ");
 
-  var args = [query].concat(array);
+  const args = [query].concat(array);
 
   return append.apply(this, args);
 };
@@ -181,11 +181,11 @@ SQL.prototype.appendList = function(placeholder, array, separator) {
  * This appends key/value pairs of the object.
  *
  * @example
- * var sql = new SQL("UPDATE table SET");
+ * const sql = new SQL("UPDATE table SET");
  * sql.appendPairs(object);
  *
  * @example
- * var sql = new SQL("SELECT * FROM table WHERE");
+ * const sql = new SQL("SELECT * FROM table WHERE");
  * sql.appendPairs(object, "?? = ?", " AND ");
  *
  * @param placeholder {string} typically: "?? = ?"
@@ -195,9 +195,9 @@ SQL.prototype.appendList = function(placeholder, array, separator) {
  */
 
 SQL.prototype.appendPairs = function(placeholder, object, separator) {
-  var args = [];
+  const args = [];
 
-  var query = map.call(Object.keys(object), function(key) {
+  const query = map.call(Object.keys(object), function(key) {
     args.push(key, object[key]);
     return placeholder || "?? = ?";
   }).join(separator || ", ");
@@ -214,16 +214,16 @@ SQL.prototype.appendPairs = function(placeholder, object, separator) {
  */
 
 SQL.prototype.toString = function() {
-  var sql = this;
-  var query = this[0];
-  var bindings = this[1];
-  var idx = 0;
-  var cache = {};
-  var NULL = sql["null"];
+  const sql = this;
+  const query = this[0];
+  let bindings = this[1];
+  let idx = 0;
+  const cache = {};
+  const NULL = sql["null"];
   return query.replace(/(\?\??\??)/g, repl);
 
   function repl(str) {
-    var val = bindings[idx++];
+    let val = bindings[idx++];
 
     if (NULL && val == null) return NULL;
 
@@ -236,9 +236,9 @@ SQL.prototype.toString = function() {
     if (sql._backslash) {
       val = val.replace(sql._backslash, "\\$1");
     }
-    var quote = sql[str];
+    const quote = sql[str];
     if (quote == null) return val; // raw
-    var re = cache[quote] || (cache[quote] = new RegExp(quote, "g"));
+    const re = cache[quote] || (cache[quote] = new RegExp(quote, "g"));
     return quote + val.replace(re, quote + quote) + quote;
   }
 };
@@ -246,7 +246,7 @@ SQL.prototype.toString = function() {
 SQL.Pg = Pg;
 
 function Pg() {
-  var sql = this;
+  let sql = this;
   if (!(sql instanceof Pg)) sql = new Pg();
   SQL.apply(sql, arguments);
   return sql;
@@ -259,7 +259,7 @@ Pg.prototype["??"] = '"';
 SQL.mysql = mysql;
 
 function mysql() {
-  var sql = this;
+  let sql = this;
   if (!(sql instanceof mysql)) sql = new mysql();
   SQL.apply(sql, arguments);
   return sql;
