@@ -23,6 +23,7 @@ test: all $(TESTS)
 	node -e 'Promise.resolve(require("./sql.js")).then(SQL => console.log(String(SQL("SELECT NOW()"))))'
 	node -e 'import("./esm/sql.mjs").then(x => console.log(String(x.default("SELECT NOW()"))))'
 
+# ES2021 - CommonJS
 ./test/%.js: ./test/%.ts
 	./node_modules/.bin/tsc -p tsconfig.json
 
