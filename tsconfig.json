@@ -12,7 +12,7 @@
     "removeComments": false,
     "skipLibCheck": false,
     "strictNullChecks": true,
-    "target": "ES2018",
+    "target": "ES2021",
     "types": [
       "mocha",
       "node"
