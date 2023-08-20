@@ -21,8 +21,13 @@
     "typescript": "^5.1.6"
   },
   "exports": {
-    "import": "./esm/sql.mjs",
-    "require": "./sql.js"
+    ".": {
+      "import": {
+        "default": "./esm/sql.mjs",
+        "types": "./sql-statement.d.ts"
+      },
+      "require": "./sql.js"
+    }
   },
   "files": [
     "LICENSE",
@@ -59,5 +64,5 @@
     "prepack": "npm run build && npm test",
     "test": "make test"
   },
-  "typings": "sql-statement.d.ts"
+  "typings": "./sql-statement.d.ts"
 }
