@@ -1,7 +1,7 @@
 {
   "name": "sql-statement",
   "description": "Tiny SQL Statement Builder",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "@kawanet",
   "bugs": {
     "url": "https://github.com/kawanet/sql-statement/issues"
@@ -23,8 +23,8 @@
   "exports": {
     ".": {
       "import": {
-        "default": "./esm/sql.mjs",
-        "types": "./sql-statement.d.ts"
+        "types": "./sql-statement.d.ts",
+        "default": "./esm/sql.mjs"
       },
       "require": "./sql.js"
     }
