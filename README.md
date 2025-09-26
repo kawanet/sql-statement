@@ -8,7 +8,7 @@ Tiny SQL Statement Builder
 ### Usage
 
 ```js
-const SQL = require("sql-statement").mysql;
+import {mysql as SQL} from "sql-statement";
 
 const tableName = "users";
 const id = "AC3C21E7";
@@ -45,28 +45,28 @@ This module is tested with SQLite, MySQL and PostgreSQL.
 ### With [SQLite](https://www.npmjs.com/package/sqlite3)
 
 ```js
-const sqlite3 = require("sqlite3");
-const SQL = require("sql-statement");
+import * as SQL from "sql-statement";
+import * as sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database(":memory:");
 const sql = new SQL("SELECT * FROM users WHERE id = ?", id);
 
-db.all(String(sql), function(err, rows) {
+db.all(String(sql), (err, rows) => {
   if (err) return console.warn(err);
   // do something
 });
 ```
 
-### With [MySQL](https://www.npmjs.com/package/mysql)
+### With [MySQL](https://www.npmjs.com/package/mysql2)
 
 ```js
-const mysql = require("mysql");
-const SQL = require("sql-statement").mysql; // MySQL version
+import * as mysql from "mysql2";
+import {mysql as SQL} from "sql-statement";
 
 const conn = mysql.createConnection("mysql://user:pass@host/db");
 const sql = new SQL("SELECT * FROM users WHERE id = ?", id);
 
-conn.query(String(sql), function(err, result) {
+conn.query(String(sql), (err, result) => {
   if (err) return console.warn(err);
   const rows = result.rows;
   // do something
@@ -76,13 +76,13 @@ conn.query(String(sql), function(err, result) {
 ### With [PostgreSQL](https://www.npmjs.com/package/pg)
 
 ```js
-const pg = require("pg");
-const SQL = require("sql-statement").Pg; // PostgreSQL version
+import * as pg from "pg";
+import {Pg as SQL} from "sql-statement";
 
 const client = new pg.Client("postgres://user:pass@host/db");
 const sql = new SQL("SELECT * FROM users WHERE id = ?", id);
 
-client.query(String(sql), function(err, rows) {
+client.query(String(sql), (err, rows) => {
   if (err) return console.warn(err);
   // do something
 });
@@ -117,33 +117,11 @@ sql.appendPairs("?? = ?", condition, " AND ");
 console.log(String(sql)); // => UPDATE table SET `name` = 'Ken', `age` = 41 WHERE `id` = 123
 ```
 
-## TypeScript
-
-for SQLite
-
-```ts
-import * as SQL from "sql-statement";
-// OR
-import SQL = require("sql-statement");
-```
-
-for MySQL
-
-```ts
-import {mysql as SQL} from "sql-statement";
-```
-
-for PostgreSQL
-
-```ts
-import {Pg as SQL} from "sql-statement";
-```
-
 ## License
 
 The MIT License (MIT)
 
-Copyright (c) 2013-2023 Yusuke Kawasaki
+Copyright (c) 2013-2025 Yusuke Kawasaki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

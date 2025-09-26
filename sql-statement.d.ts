@@ -24,7 +24,7 @@ declare class SQL {
 
     append(sql: this): this;
 
-    appendList(placeholder: string, array: string[], separator?: string): this;
+    appendList(placeholder: string, array: value[], separator?: string): this;
 
     appendPairs(placeholder: string, object: any, separator?: string): this;
 }
