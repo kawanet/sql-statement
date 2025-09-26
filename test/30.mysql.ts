@@ -1,14 +1,14 @@
 #!/usr/bin/env mocha -R spec
 
 import {strict as assert} from "assert";
+import * as mysql from "mysql2";
 import {promisify} from "util";
-import * as mysql from "mysql";
 
 import {mysql as SQL} from "../";
 
 const TESTNAME = __filename.split("/").pop();
 
-const config: mysql.ConnectionConfig = {
+const config: mysql.ConnectionOptions = {
     host: process.env.MYSQL_HOST,
     port: +(process.env.MYSQL_PORT as string) || undefined,
     user: process.env.MYSQL_USER,
