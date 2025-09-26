@@ -16,5 +16,11 @@ describe(TESTNAME + " testing", () => {
         assert.equal(new SQL().appendList("?", array, ",") + "", "'aa','bb','cc'");
 
         assert.equal(new SQL().appendList("??", array, ",") + "", "`aa`,`bb`,`cc`");
+
+        assert.equal(new SQL().appendList("?", [1, 2, 3]) + "", "1, 2, 3");
+
+        assert.equal(new SQL().appendList("?", [null, undefined]) + "", "NULL, NULL");
+
+        assert.equal(new SQL().appendList("?", [true, false]) + "", "true, false");
     });
 });
